@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns:json-logger="http://www.mulesoft.org/schema/mule/json-logger"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/json-logger http://www.mulesoft.org/schema/mule/json-logger/current/mule-json-logger.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<flow name="getexternalinsurancedetail" doc:id="12b5e48d-15d2-4658-86a7-741aff9a6b0d" >
+		<json-logger:logger doc:name="Logger" doc:id="138e16e0-2448-4d57-90c7-004643f6b742" config-ref="JSON_Logger_Config" message='#["sysAPI external insurance intiated" ++ now() as String]'/>
+		<db:select doc:name="Select" doc:id="868c5fd9-cb42-473a-bdb3-51afa68f06df" config-ref="Database_Config">
+			<db:sql ><![CDATA[SELECT * FROM InsurerQuoteDetails where InsurerName = :insurer]]></db:sql>
+			<db:input-parameters ><![CDATA[#[{'insurer': attributes.queryParams.insurerName}]]]></db:input-parameters>
+		</db:select>
+		<ee:transform doc:name="Transform Message" doc:id="11146289-56b3-4e24-a924-7396c11c1ded" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<json-logger:logger doc:name="Logger" doc:id="d166a0da-54a3-4e8d-90b3-ebece002f7d0" config-ref="JSON_Logger_Config" message='#["sysAPI external insurance completed" ++ now() as String]'/>
+	</flow>
+</mule>

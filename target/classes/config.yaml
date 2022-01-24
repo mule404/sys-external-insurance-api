@@ -1,0 +1,18 @@
+
+jsonlogger: 
+  applicationName: "sys-external-insurance-api"
+  version: "v1"
+  
+mule:
+  env: "PROD"
+  
+DB:
+  username: "sql6464925"
+  password: "aLCH5uBDyz"
+  host: "sql6.freesqldatabase.com"
+  port: "3306"
+  database: "sql6464925"
+
+http:
+  port: "8087"
+  
